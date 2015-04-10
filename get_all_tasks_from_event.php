@@ -25,7 +25,6 @@ $task["quantity"]=$row["quantity"];
 $task["description"]=$row["description"];
 $task["costs_of_task"]=$row["cost"];
 $task["percentage_of_task"]=$row["percentage"];
-
 $editor_id=$row["editor_id"];
 $getEditor= mysql_query("SELECT name FROM user WHERE user_id='$editor_id'");
 

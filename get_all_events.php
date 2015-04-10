@@ -26,15 +26,21 @@ if(mysql_num_rows($result)>0){
 	$costsOfEvent=mysql_query("SELECT * FROM task WHERE event_id='$event_id'");
 	if(mysql_num_rows($costsOfEvent)>0){
 		$event["costs_of_event"]=0;
+		$event["percentage_of_event"]=0;
+		$total=0;
+		$maximum=((mysql_num_rows($costsOfEvent)*100));
+
 		while ($rowCosts = mysql_fetch_array($costsOfEvent)) {
 		$event["costs_of_event"]+=$rowCosts["cost"];
-	}
+		$total+=$rowCosts["percentage"];
+		}
+		$event["percentage_of_event"]= round(((100/$maximum)*$total),2);
 	}
 	else{
 	$event["costs_of_event"]=0;
+	$event["percentage_of_event"]=0;
 	}
-	//$percentageOfEvent=mysql_query("SELECT * FROM task WHERE event_id='$event_id'");
-
+	
  	$event["event_id"]=$event_id;
  	$event["name"]=$row["name"];
  	$event["location"]=$row["location"];
