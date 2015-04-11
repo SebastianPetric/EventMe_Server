@@ -4,8 +4,8 @@ $response= array();
 
 if(isset($_POST['email']) && isset($_POST['password'])){
 
-    $email = $_POST['email'];
-    $password = $_POST['password'].'';
+    $email = mysql_real_escape_string($_POST['email']);
+    $password = mysql_real_escape_string($_POST['password']);
 
     require_once 'db_connect.php';
 

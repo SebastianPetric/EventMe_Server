@@ -5,10 +5,10 @@ $response = array();
 
 if (isset($_POST['name']) && isset($_POST['prename']) && isset($_POST['email'])&& isset($_POST['password'])) {
 
-    $name = $_POST['name'];
-    $prename = $_POST['prename'];
-    $email = $_POST['email'];
-    $password = $_POST['password'];
+    $name = mysql_real_escape_string($_POST['name']);
+    $prename = mysql_real_escape_string($_POST['prename']);
+    $email = mysql_real_escape_string($_POST['email']);
+    $password =mysql_real_escape_string($_POST['password']);
 
     require_once 'db_connect.php';
 

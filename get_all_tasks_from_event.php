@@ -40,9 +40,6 @@ array_push($response["tasks"], $task);
  $response["status"]=200;
  $response["message"]="Aufgaben aktualisiert.";
  echo json_encode($response);
-
-
-
 }else{
  $response["status"]=400;
  $response["message"]="Keine Aufgaben für dieses Event vorhanden.";
