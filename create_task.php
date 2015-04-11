@@ -6,9 +6,9 @@ if(isset($_POST['event_id'])&&isset($_POST['editor_id'])&&isset($_POST['task'])&
 
 $event_id = $_POST['event_id'];
 $editor_id = $_POST['editor_id'];
-$task = $_POST['task'];
-$description = $_POST['description'];
-$quantity = $_POST['quantity'];
+$task = mysql_real_escape_string($_POST['task']);
+$description = mysql_real_escape_string($_POST['description']);
+$quantity = mysql_real_escape_string($_POST['quantity']);
 
 require_once 'db_connect.php';
 
