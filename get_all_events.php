@@ -10,7 +10,7 @@ require_once 'db_connect.php';
 
 $db = new DB_CONNECT();
 
-$result= mysql_query("SELECT * FROM event WHERE owner='$user_id' AND status='$status_open'");
+$result= mysql_query("SELECT * FROM event WHERE owner='$user_id' AND status='$status_open' ORDER BY date");
 
 if(mysql_num_rows($result)>0){
 	
@@ -31,7 +31,7 @@ if(mysql_num_rows($result)>0){
 		$maximum=((mysql_num_rows($costsOfEvent)*100));
 
 		while ($rowCosts = mysql_fetch_array($costsOfEvent)) {
-		$event["costs_of_event"]+=$rowCosts["cost"];
+		$event["costs_of_event"]+=round(($rowCosts["cost"]),2);
 		$total+=$rowCosts["percentage"];
 		}
 		$event["percentage_of_event"]= round(((100/$maximum)*$total),2);

@@ -9,7 +9,7 @@ require_once 'db_connect.php';
 
 $db = new DB_CONNECT();
 
-$result= mysql_query("SELECT * FROM task WHERE event_id='$event_id'");
+$result= mysql_query("SELECT * FROM task WHERE event_id='$event_id' ORDER BY percentage");
 
 if(mysql_num_rows($result)>0){
 
@@ -51,5 +51,4 @@ array_push($response["tasks"], $task);
  $response["message"]="Fehler. Versuchen Sie es später noch ein Mal!";
  echo json_encode($response);
 }
-
 ?>
