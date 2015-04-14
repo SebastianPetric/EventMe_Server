@@ -33,17 +33,17 @@ if(mysql_num_rows($result)>0){
             if(mysql_num_rows($checkStatusIfOpen)>0){
               $checkIfYouHaveToAccept= mysql_query("SELECT * FROM friends WHERE (user_a,user_b)= ('$userb_id','$user_id') AND status='$status_open'");
               if(mysql_num_rows($checkIfYouHaveToAccept)>0){
-                  $user["status_friend"]=$status_have_to_accept; 
+                  $user["status"]=$status_have_to_accept; 
               }else{
                 $row_status = mysql_fetch_array($checkStatus);
-                $user["status_friend"]=$row_status["status"]; 
+                $user["status"]=$row_status["status"]; 
               }
             }else{
               $row_status = mysql_fetch_array($checkStatus);
-              $user["status_friend"]=intval($row_status["status"]); 
+              $user["status"]=intval($row_status["status"]); 
             }
         }else{
-          $user["status_friend"]=$status_unfriended;
+          $user["status"]=$status_unfriended;
         }
         $user["name"] = $row["name"];
         $user["prename"] = $row["prename"];
@@ -55,7 +55,7 @@ if(mysql_num_rows($result)>0){
     echo json_encode($response);
 }else{
    $response["status"] = 400;
-   $response["message"] = "Es gibt noch keine anderen registrierten User!";
+   $response["message"] = "Suche erfolglos!";
    echo json_encode($response);
 }
 }
