@@ -10,7 +10,7 @@ require_once 'db_connect.php';
 
 $db = new DB_CONNECT();
 
-$result= mysql_query("SELECT * FROM event WHERE owner='$user_id' AND status='$status_open' ORDER BY date");
+$result= mysql_query("SELECT * FROM event INNER JOIN event_user ON event.event_id= event_user.event_id AND event_user.user_id='$user_id' ORDER BY event.date");
 
 if(mysql_num_rows($result)>0){
 	
