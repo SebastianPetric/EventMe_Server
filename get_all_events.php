@@ -1,16 +1,16 @@
 <?php 
 $response= array();
 
-if(isset($_POST['user_id'])){
+if(isset($_POST['admin_id'])){
 
-$user_id = $_POST['user_id'];
+$admin_id = $_POST['admin_id'];
 $status_open=1;
 
 require_once 'db_connect.php';
 
 $db = new DB_CONNECT();
 
-$result= mysql_query("SELECT * FROM event INNER JOIN event_user ON event.event_id= event_user.event_id AND event_user.user_id='$user_id' ORDER BY event.date");
+$result= mysql_query("SELECT * FROM event INNER JOIN event_user ON event.event_id= event_user.event_id AND event_user.user_id='$admin_id' ORDER BY event.date");
 
 if(mysql_num_rows($result)>0){
 	
@@ -47,10 +47,15 @@ if(mysql_num_rows($result)>0){
  	$event["date"]=$row["date"];
  	array_push($response["events"], $event);
  }
-}
  $response["status"]=200;
  $response["message"]="Alle Events aktualisiert.";
  echo json_encode($response);
+}else{
+	$response["status"]=400;
+ 	$response["message"]="Zur Zeit keine Events!";
+ 	echo json_encode($response);
+}
+ 
 }else{
  $response["status"]=400;
  $response["message"]="Fehler. Versuchen Sie es später noch ein Mal!";

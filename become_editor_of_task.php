@@ -21,10 +21,12 @@ $result= mysql_query("UPDATE task SET editor_id='$editor_id' WHERE task_id='$tas
 $getEditor= mysql_query("SELECT name FROM user WHERE user_id='$editor_id'");
 $getEditorArray=mysql_fetch_array($getEditor);
 $getEditorName=$getEditorArray["name"];
+$getEditorPreName=$getEditorArray["prename"];
 if($result){
 	$response["status"] = 200;
+        $response["editor_name"]= $getEditorName; 
+        $response["editor_prename"]= $getEditorPreName;  
         $response["message"] = "Sie sind der neue Bearbeiter der Aufgabe!";
-        $response["editor_name"]= $getEditorName;  
         echo json_encode($response);
 }else{
 	$response["status"] = 400;
@@ -35,8 +37,8 @@ if($result){
         $result= mysql_query("UPDATE task SET editor_id='$status_inactive' WHERE task_id='$task_id'");
         if($result){
         $response["status"] = 200;
-        $response["message"] = "Du hast die Aufgabe freigegeben!";
         $response["editor_name"]= $name_inactive;    
+        $response["message"] = "Du hast die Aufgabe freigegeben!";
         echo json_encode($response);
         }else{
         $response["status"] = 400;
@@ -49,7 +51,7 @@ if($result){
         echo json_encode($response);
 }
 }else{
-		$response["status"] = 400;
+        $response["status"] = 400;
         $response["message"] = "Oops! Versuch es später noch einmal";  
         echo json_encode($response);
 }
