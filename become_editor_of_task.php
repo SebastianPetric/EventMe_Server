@@ -21,11 +21,9 @@ $result= mysql_query("UPDATE task SET editor_id='$editor_id' WHERE task_id='$tas
 $getEditor= mysql_query("SELECT name FROM user WHERE user_id='$editor_id'");
 $getEditorArray=mysql_fetch_array($getEditor);
 $getEditorName=$getEditorArray["name"];
-$getEditorPreName=$getEditorArray["prename"];
 if($result){
 	$response["status"] = 200;
-        $response["editor_name"]= $getEditorName; 
-        $response["editor_prename"]= $getEditorPreName;  
+        $response["editor_name"]= $getEditorName;  
         $response["message"] = "Sie sind der neue Bearbeiter der Aufgabe!";
         echo json_encode($response);
 }else{

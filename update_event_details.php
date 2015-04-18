@@ -1,16 +1,16 @@
 <?php 
 $response= array();
 
-if(isset($_POST['admin_id'])){
+if(isset($_POST['admin_id'])&& isset($_POST['event_id'])){
 
 $admin_id = $_POST['admin_id'];
-$status_open=1;
+$event_id = $_POST['event_id'];
 
 require_once 'db_connect.php';
 
 $db = new DB_CONNECT();
 
-$result= mysql_query("SELECT * FROM event INNER JOIN event_user ON event.event_id= event_user.event_id AND event_user.user_id='$admin_id' ORDER BY event.date");
+$result= mysql_query("SELECT * FROM event INNER JOIN event_user WHERE event.event_id='$event_id' AND event_user.user_id='$admin_id' AND event_user.event_id='$event_id'");
 
 if(mysql_num_rows($result)>0){
 	
@@ -19,7 +19,6 @@ if(mysql_num_rows($result)>0){
 	
 	while ($row = mysql_fetch_array($result)){
  	
- 	$event_id=$row["event_id"];
 	$numberOrganizersOfEvent=mysql_query("SELECT * FROM event_user WHERE event_id='$event_id'");
 	$event["num_organizers_event"]=mysql_num_rows($numberOrganizersOfEvent);
 
@@ -40,25 +39,25 @@ if(mysql_num_rows($result)>0){
 	$event["costs_of_event"]=0;
 	$event["percentage_of_event"]=0;
 	}
-	
  	$event["event_id"]=$event_id;
- 	$event["name"]=$row["name"];
  	$event["location"]=$row["location"];
+ 	$event["name"]=$row["name"];
  	$event["date"]=$row["date"];
  	array_push($response["events"], $event);
  }
  $response["status"]=200;
- $response["message"]="Alle Events aktualisiert.";
+ //$response["message"]="Alle Events aktualisiert.";
  echo json_encode($response);
 }else{
 	$response["status"]=400;
- 	$response["message"]="Zur Zeit keine Events!";
+ 	//$response["message"]="Zur Zeit keine Events!";
  	echo json_encode($response);
 }
  
 }else{
  $response["status"]=400;
- $response["message"]="Fehler. Versuchen Sie es später noch ein Mal!";
+ //$response["message"]="Fehler. Versuchen Sie es später noch ein Mal!";
  echo json_encode($response);
 }
+
 ?>

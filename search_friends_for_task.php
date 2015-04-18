@@ -31,7 +31,7 @@ if(mysql_num_rows($getAllFriends)>0){
         $user["user_id"] = $row["user_id"];
         $user_b=$row["user_id"];
 
-        $checkIfAlreadyInEvent= mysql_query("SELECT * FROM event_user WHERE user_id='$user_b' AND event_id='$event_id'");
+        $checkIfAlreadyInEvent= mysql_query("SELECT * FROM task WHERE editor_id='$user_b' AND task_id='$event_id'");
         
         if(mysql_num_rows($checkIfAlreadyInEvent)>0){
           $user["status"]=$status_if_already_in_event;
