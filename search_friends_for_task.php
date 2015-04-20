@@ -4,6 +4,9 @@ $response= array();
 
 if(isset($_POST['admin_id'])&&isset($_POST['event_id'])&&isset($_POST['search'])){
 
+require_once 'db_connect.php';
+$db = new DB_CONNECT();
+
 $admin_id=$_POST['admin_id'];
 $event_id=$_POST['event_id'];
 $search=mysql_real_escape_string($_POST['search']);
@@ -11,9 +14,6 @@ $search=mysql_real_escape_string($_POST['search']);
 $status_if_already_in_event=1;
 $status_if_not_in_event=0;
 $status_friended=2;
-
-require_once 'db_connect.php';
-$db = new DB_CONNECT();
 
 if($search==""){
       $getAllFriends= mysql_query("SELECT * FROM user INNER JOIN friends ON (user.user_id= friends.user_a OR user.user_id= friends.user_b) WHERE user.user_id NOT LIKE '$admin_id' AND (friends.user_a='$admin_id' OR friends.user_b='$admin_id') AND friends.status='$status_friended' ORDER BY user.name");
