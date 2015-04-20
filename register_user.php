@@ -14,13 +14,12 @@ if (isset($_POST['name']) && isset($_POST['prename']) && isset($_POST['email'])&
 
     $db = new DB_CONNECT();
 
-    $result= mysql_query("SELECT * FROM user WHERE email='$email'");
+    $checkIfEmailAlreadyRegistered= mysql_query("SELECT * FROM user WHERE email='$email'");
 
-    if(mysql_num_rows($result) == 0) {
+    if(mysql_num_rows($checkIfEmailAlreadyRegistered) == 0) {
 
-        $result = mysql_query("INSERT INTO user(name, prename, email,password) VALUES('$name', '$prename', '$email', '$password')");
-
-        if ($result) {
+        $registration = mysql_query("INSERT INTO user(name, prename, email,password) VALUES('$name', '$prename', '$email', '$password')");
+        if ($registration) {
             $response["status"] = 200;
             $response["message"] = "Erfolgreich registriert!";
             echo json_encode($response);

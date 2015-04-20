@@ -45,7 +45,7 @@ if(mysql_num_rows($getAllFriends)>0){
         array_push($response["users"], $user);
     }
     $response["status"] = 200;
-    $response["message"] = "Liste aktualisiert.";
+    $response["message"] = "Freundesliste aktualisiert.";
     echo json_encode($response);
 }else{
    $response["status"] = 400;

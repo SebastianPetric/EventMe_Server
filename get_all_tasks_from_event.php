@@ -16,15 +16,6 @@ if(mysql_num_rows($result)>0){
 $response["tasks"] = array();
 $task=array();
 
-$getEventData=mysql_query("SELECT date,location,name FROM event WHERE event_id='$event_id'");
-	if(mysql_num_rows($getEventData)>0){
-		while ($rowEvent = mysql_fetch_array($getEventData)) {
-			$task["event_date"]=$rowEvent["date"];
-			$task["event_location"]=$rowEvent["location"];
-			$task["event_name"]=$rowEvent["name"];
-	}
-	}
-
 while ($row = mysql_fetch_array($result)) {
 	
 $task["task_id"]=$row["task_id"];

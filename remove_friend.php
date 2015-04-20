@@ -17,7 +17,6 @@ $db = new DB_CONNECT();
 $checkIfDeleteFriend= mysql_query("SELECT * FROM friends WHERE ((user_a,user_b)= ('$usera_id','$userb_id') OR (user_a,user_b)= ('$userb_id','$usera_id')) AND status='$status_friended'");
 $checkIfDenyRequest= mysql_query("SELECT * FROM friends WHERE (user_b,user_a)= ('$usera_id','$userb_id') AND status='$status_open'");
 
-
 if(mysql_num_rows($checkIfDeleteFriend)>0){
 	$result=mysql_query("DELETE FROM friends WHERE ((user_a,user_b)= ('$usera_id','$userb_id') OR (user_a,user_b)= ('$userb_id','$usera_id'))");
 	if($result){
@@ -46,5 +45,4 @@ if(mysql_num_rows($checkIfDeleteFriend)>0){
 	$response["message"]="Oops! Versuch es später noch einmal";
 	echo json_encode($response);
 	}
-
 ?>
