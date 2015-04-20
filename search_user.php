@@ -4,15 +4,16 @@ $response= array();
 
 if(isset($_POST['search'])&&isset($_POST['admin_id'])){
 
+
+require_once 'db_connect.php';
+$db = new DB_CONNECT();
+
 $search=mysql_real_escape_string($_POST['search']);
 $admin_id=$_POST['admin_id'];
 $status_open=0;
 $status_have_to_accept=3;
 $status_unfriended=1;
 $status_friended=2;
-
-require_once 'db_connect.php';
-$db = new DB_CONNECT();
 
 if($search==""){
       $result= mysql_query("SELECT * FROM user WHERE user_id NOT LIKE '$admin_id'");

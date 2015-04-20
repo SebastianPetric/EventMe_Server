@@ -4,10 +4,10 @@ $response = array();
 
 if (isset($_POST['name']) && isset($_POST['owner_id']) && isset($_POST['date'])&& isset($_POST['location'])) {
 
-	$name = mysql_real_escape_string($_POST['name']);
+	$name = $_POST['name'];
     $owner_id = $_POST['owner_id'];
     $date = $_POST['date'];
-    $location = mysql_real_escape_string($_POST['location']);
+    $location = $_POST['location'];
     
     require_once 'db_connect.php';
 
@@ -27,7 +27,8 @@ if (isset($_POST['name']) && isset($_POST['owner_id']) && isset($_POST['date'])&
 
     if($result){
         $getEventID=mysql_query("SELECT event_id FROM event WHERE owner='$owner_id' AND name='$name' AND location='$location' AND date='$date'");
-        $event_id= mysql_fetch_array($getEventID)["event_id"];
+        $event_id_temp= mysql_fetch_array($getEventID);
+        $event_id= $event_id_temp["event_id"];
         $updateEventUser=mysql_query("INSERT INTO event_user (event_id,user_id) VALUES ('$event_id','$owner_id')");
         
         $response["status"]=200;

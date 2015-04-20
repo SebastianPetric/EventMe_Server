@@ -5,14 +5,14 @@ $response = array();
 
 if (isset($_POST['name']) && isset($_POST['prename']) && isset($_POST['email'])&& isset($_POST['password'])) {
 
+    require_once 'db_connect.php';
+    $db = new DB_CONNECT();
+
     $name = mysql_real_escape_string($_POST['name']);
     $prename = mysql_real_escape_string($_POST['prename']);
     $email = mysql_real_escape_string($_POST['email']);
     $password =mysql_real_escape_string($_POST['password']);
 
-    require_once 'db_connect.php';
-
-    $db = new DB_CONNECT();
 
     $checkIfEmailAlreadyRegistered= mysql_query("SELECT * FROM user WHERE email='$email'");
 

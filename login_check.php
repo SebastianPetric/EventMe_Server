@@ -4,12 +4,11 @@ $response= array();
 
 if(isset($_POST['email']) && isset($_POST['password'])){
 
+    require_once 'db_connect.php';
+    $db = new DB_CONNECT();
+
     $email = mysql_real_escape_string($_POST['email']);
     $password = mysql_real_escape_string($_POST['password']);
-
-    require_once 'db_connect.php';
-
-    $db = new DB_CONNECT();
 
     $result = mysql_query("SELECT * FROM user WHERE email='$email'");
     
@@ -26,7 +25,7 @@ if(isset($_POST['email']) && isset($_POST['password'])){
             $response["message"] = "Login erfolgreich.";
             echo json_encode($response);
         }else{
-            
+             //$response["status1"]=$passwordCheck;  
             $response["status"] = 400;
             $response["message"] = "Password nicht korrekt!";
             echo json_encode($response);
