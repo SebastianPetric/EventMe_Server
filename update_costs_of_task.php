@@ -11,7 +11,6 @@ $type_of_update=$_POST['type_of_update'];
 $status_inactive=-1;
 
 require_once 'db_connect.php';
-
 $db = new DB_CONNECT();
 
 $checkIfTaskNotLocked= mysql_query("SELECT * FROM task WHERE task_id='$task_id' AND editor_id='$status_inactive'");
@@ -27,7 +26,8 @@ if(mysql_num_rows($checkIfTaskNotLocked)>0){
 		
 	}else if(intval($type_of_update)==1){
 		$getCosts= mysql_query("SELECT * FROM task WHERE task_id='$task_id' AND editor_id='$editor_id'");	
-		$total= round((mysql_fetch_array($getCosts)['cost']+$costs_of_task),2);
+		$costs=mysql_fetch_array($getCosts);
+		$total= round(($costs['cost']+$costs_of_task),2);
 		$result= mysql_query("UPDATE task SET cost='$total' WHERE task_id='$task_id'");	
 	}
 		if($result){

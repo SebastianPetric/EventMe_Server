@@ -10,7 +10,6 @@ $percentage=$_POST['percentage_of_task'];
 $status_inactive=-1;
 
 require_once 'db_connect.php';
-
 $db = new DB_CONNECT();
 
 $checkIfTaskNotLocked= mysql_query("SELECT * FROM task WHERE task_id='$task_id' AND editor_id='$status_inactive'");

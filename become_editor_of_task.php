@@ -4,14 +4,13 @@ $response=array();
 
 if(isset($_POST['task_id'])&&isset($_POST['editor_id'])){
 
+require_once 'db_connect.php';
+$db = new DB_CONNECT();
+
 $task_id= mysql_real_escape_string($_POST['task_id']);
 $editor_id=mysql_real_escape_string($_POST['editor_id']);
 $status_inactive=-1;
 $name_inactive="offen";
-
-require_once 'db_connect.php';
-
-$db = new DB_CONNECT();
 
 $checkIfTaskIsInactiv= mysql_query("SELECT * FROM task WHERE task_id='$task_id' AND editor_id='$status_inactive'");
 $checkIfYouAreEditor=mysql_query("SELECT * FROM task WHERE task_id='$task_id' AND editor_id='$editor_id'");

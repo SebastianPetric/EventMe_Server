@@ -4,15 +4,15 @@ $response= array();
 
 if(isset($_POST['event_id'])&&isset($_POST['editor_id'])&&isset($_POST['task'])&&isset($_POST['description'])&&isset($_POST['quantity'])){
 
+
+require_once 'db_connect.php';
+$db = new DB_CONNECT();
+
 $event_id = $_POST['event_id'];
 $editor_id = $_POST['editor_id'];
 $task = mysql_real_escape_string($_POST['task']);
 $description = mysql_real_escape_string($_POST['description']);
 $quantity = mysql_real_escape_string($_POST['quantity']);
-
-require_once 'db_connect.php';
-
-$db = new DB_CONNECT();
 
 $result= mysql_query("INSERT INTO task (event_id,task,editor_id,description,quantity) VALUES ('$event_id','$task','$editor_id','$description','$quantity')");
 
