@@ -2,11 +2,11 @@
 
 $response=array();
 
-if(isset($_GET['task_id'])&&isset($_GET['editor_id'])&&isset($_GET['percentage_of_task'])){
+if(isset($_POST['task_id'])&&isset($_POST['editor_id'])&&isset($_POST['percentage_of_task'])){
 
-$task_id= $_GET['task_id'];
-$editor_id=$_GET['editor_id'];
-$percentage=$_GET['percentage_of_task'];
+$task_id= $_POST['task_id'];
+$editor_id=$_POST['editor_id'];
+$percentage=$_POST['percentage_of_task'];
 $status_inactive=-1;
 
 require_once 'db_connect.php';

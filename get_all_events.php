@@ -1,9 +1,9 @@
 <?php 
 $response= array();
 
-if(isset($_GET['admin_id'])){
+if(isset($_POST['admin_id'])){
 
-$admin_id = $_GET['admin_id'];
+$admin_id = $_POST['admin_id'];
 $status_open=1;
 
 require_once 'db_connect.php';

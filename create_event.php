@@ -39,9 +39,10 @@ if (isset($_POST['name']) && isset($_POST['owner_id']) && isset($_POST['date'])&
                                 $get_event_id->bindParam(':location', $location);
                                 $get_event_id->execute();
 
-                                $row = $get_event_id->fetch() 
-                                $event_id= $row["event_id"];
-
+                                foreach ($get_event_id as $row){
+                                    $event_id= $row["event_id"];
+                                }
+                                
                                 if($create_event = $db->prepare("INSERT INTO event_user (event_id,user_id) VALUES (:event_id,:owner_id)")){
                                     $create_event->bindParam(':event_id', $event_id);
                                     $create_event->bindParam(':owner_id', $owner_id);

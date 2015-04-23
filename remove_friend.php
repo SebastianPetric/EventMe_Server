@@ -83,7 +83,7 @@ if($check_if_delete_friend = $db->prepare("SELECT * FROM friends WHERE ((user_a,
 $db=null;
 }else{
 	$response["status"]=400;
-	$response["message"]="Oops! Versuch es später noch einmal";
+	$response["message"]="Es wurden nicht alle Datensätze übertragen!";
 	echo json_encode($response);
 	}
 ?>

@@ -8,12 +8,11 @@ if(isset($_POST['email']) && isset($_POST['password'])){
     $email = $_POST['email'];
 
     require_once 'db_connect.php';
-        
-    if($login = $db->prepare("SELECT * FROM user WHERE email = :email")){
+          
+    if($login = $db->prepare("SELECT * FROM `user` WHERE `email` = :email")){
         $db->beginTransaction();
         $login->bindParam(':email', $email);
         $login->execute();
-
             if(($login->rowCount())>0){   
                 while ($row = $login->fetch()) {
                     $password_check = $row["password"];

@@ -1,6 +1,6 @@
 <?php
-	$DB_SERVER = 'mysql3.000webhost.com';
-    $DB_DATABASE = 'a2431875_eventmy';
-    $DB_USER = 'a2431875_root';
+	$DB_SERVER = 'mysql.hostinger.de';
+    $DB_DATABASE = 'u749525747_evemy';
+    $DB_USER = 'u749525747_root';
     $DB_PASSWORD = '59IfwV22';
 ?>

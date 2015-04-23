@@ -14,8 +14,6 @@ $status_friended=2;
 $status_open=0;
 $status_have_to_accept=3;
 
-
-
 if($search==""){
       $getAllFriends= mysql_query("SELECT * FROM user INNER JOIN friends ON (user.user_id= friends.user_a OR user.user_id= friends.user_b) WHERE user.user_id NOT LIKE '$admin_id' AND (friends.user_a='$admin_id' OR friends.user_b='$admin_id') AND (friends.status='$status_friended' OR friends.status='$status_open') ORDER BY friends.status");
 }else{
