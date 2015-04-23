@@ -1,17 +1,12 @@
 <?php 
 $response= array();
 
-if(isset($_POST['admin_id'])){
+if(isset($_GET['admin_id'])){
 
-$admin_id = $_POST['admin_id'];
+$admin_id = $_GET['admin_id'];
 $status_open=1;
-$event_user="event_user";
-$task="task";
 
 require_once 'db_connect.php';
-
-$get_date=$db->prepare("SELECT * FROM :table_name WHERE event_id=:event_id");
-
 
 if($result= $db->prepare("SELECT * FROM event INNER JOIN event_user ON event.event_id= event_user.event_id AND event_user.user_id=:admin_id ORDER BY event.date")){
     $db->beginTransaction();
@@ -23,24 +18,23 @@ if($result= $db->prepare("SELECT * FROM event INNER JOIN event_user ON event.eve
      $event = array(); 
      foreach ($result as $row) {
         $event_id=$row["event_id"];
-        if($get_date){
+        if($get_organizers=$db->prepare("SELECT * FROM event_user WHERE event_id=:event_id")){
             //Get all Users who are in this event
-            $get_date->bindParam(':table_name', $event_user);
-            $get_date->bindParam(':event_id', $event_id);
-            $get_date->execute();
-            $event["num_organizers_event"]=$result->rowCount();
-        
-            //Get all Tasks in that event
-            $get_date->bindParam(':table_name', $task);
-            $get_date->bindParam(':event_id', $event_id);
-            $get_date->execute();
+            $get_organizers->bindParam(':event_id', $event_id);
+            $get_organizers->execute();
+            $event["num_organizers_event"]=$get_organizers->rowCount();
 
-                 if($get_date->rowCount()>0){
+            if($get_tasks=$db->prepare("SELECT * FROM task WHERE event_id=:event_id")){
+            //Get all Tasks in that event
+            $get_tasks->bindParam(':event_id', $event_id);
+            $get_tasks->execute();
+
+                 if($get_tasks->rowCount()>0){
                     $event["costs_of_event"]=0;
                     $event["percentage_of_event"]=0;
                     $total=0;
-                    $maximum=(($get_date->rowCount())*100);
-                    foreach ($get_date as $rowCosts) {
+                    $maximum=(($get_tasks->rowCount())*100);
+                    foreach ($get_tasks as $rowCosts) {
                     $event["costs_of_event"]+=round(($rowCosts["cost"]),2);
                     $total+=$rowCosts["percentage"];
                     }
@@ -49,6 +43,12 @@ if($result= $db->prepare("SELECT * FROM event INNER JOIN event_user ON event.eve
                     $event["costs_of_event"]=0;
                     $event["percentage_of_event"]=0;
                  }
+             }else{
+                $db -> rollBack ();
+                $response["status"]=400;
+                $response["message"]="Oops. Versuchen Sie es später noch einmal.";
+                echo json_encode($response);
+             }
         }else{
             $db -> rollBack ();
             $response["status"]=400;

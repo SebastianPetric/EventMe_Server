@@ -4,13 +4,13 @@ $response= array();
 
 if(isset($_POST['event_id'])&&isset($_POST['editor_id'])&&isset($_POST['task'])&&isset($_POST['description'])&&isset($_POST['quantity'])){
 
-require_once 'db_connect.php';
-
 $event_id = $_POST['event_id'];
 $editor_id = $_POST['editor_id'];
 $task = $_POST['task'];
 $description = $_POST['description'];
 $quantity = $_POST['quantity'];
+
+require_once 'db_connect.php';
 
 if($create_task = $db->prepare("INSERT INTO task (event_id,task,editor_id,description,quantity) VALUES (:event_id,:task,:editor_id,:description,:quantity)")){
                 $db->beginTransaction();

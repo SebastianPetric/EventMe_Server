@@ -2,45 +2,70 @@
 
 $response=array();
 
-if(isset($_POST['task_id'])&&isset($_POST['editor_id'])&&isset($_POST['percentage_of_task'])){
+if(isset($_GET['task_id'])&&isset($_GET['editor_id'])&&isset($_GET['percentage_of_task'])){
 
-$task_id= $_POST['task_id'];
-$editor_id=$_POST['editor_id'];
-$percentage=$_POST['percentage_of_task'];
+$task_id= $_GET['task_id'];
+$editor_id=$_GET['editor_id'];
+$percentage=$_GET['percentage_of_task'];
 $status_inactive=-1;
 
 require_once 'db_connect.php';
-$db = new DB_CONNECT();
 
-$checkIfTaskNotLocked= mysql_query("SELECT * FROM task WHERE task_id='$task_id' AND editor_id='$status_inactive'");
-$checkIfTaskAlreadyLocked= mysql_query("SELECT * FROM task WHERE task_id='$task_id' AND editor_id='$editor_id'");
+$check= $db->prepare("SELECT * FROM task WHERE task_id=:task_id AND editor_id=:editor");
 
-if(mysql_num_rows($checkIfTaskNotLocked)>0){
-		$response["status"] = 400;
-        $response["message"] = "Du musst dich erst für diese Aufgabe locken!";  
-        echo json_encode($response);
-}else if(mysql_num_rows($checkIfTaskAlreadyLocked)>0){
+			if($check){
+				//Check if Task has no editor
+				$db->beginTransaction();
+        		$check->bindParam(':task_id', $task_id);
+        		$check->bindParam(':editor', $status_inactive);
+        		$check->execute();
 
-		$result= mysql_query("UPDATE task SET percentage='$percentage' WHERE task_id='$task_id'");
-		
-		if($result){
-		$response["status"] = 200;
-        $response["message"] = "Status erfolgreich aktualisiert!";  
-        echo json_encode($response);
+        		if(($check-> rowCount())>0){
+        			$db->rollBack();
+					$response["status"] = 400;
+        			$response["message"] = "Du musst dich erst für diese Aufgabe locken!";  
+        			echo json_encode($response);
+        		}else{
+        			//Check if you are Editor of Task
+        			$check->bindParam(':task_id', $task_id);
+        			$check->bindParam(':editor', $editor_id);
+        			$check->execute();
+        			if(($check-> rowCount())>0){
+        				if($result= $db->prepare("UPDATE task SET percentage=:percentage WHERE task_id=:task_id")){
+							//Update Percentage
+							$result->bindParam(':task_id', $task_id);
+        					$result->bindParam(':percentage', $percentage);
+        					$result->execute();
+        					if($result){
+        						$db->commit();
+								$response["status"] = 200;
+        						$response["message"] = "Status erfolgreich aktualisiert!";  
+        						echo json_encode($response);
+        					}else{
+        						$db->rollBack();
+        						$response["status"] = 400;
+        						$response["message"] = "Oops! Versuch es später noch einmal";  
+        						echo json_encode($response);
+        					}
+        				}
+        			}else{
+        				$db->rollBack();
+						$response["status"] = 400;
+        				$response["message"] = "Jemand anderes bearbeitet diese Aufgabe bereits!";  
+        				echo json_encode($response);
+					}
+        		}
+			}else{
+				$response["status"] = 400;
+        		$response["message"] = "Oops! Versuch es später noch einmal";  
+        		echo json_encode($response);
+			}
+			$db=null;
 		}else{
-		$response["status"] = 400;
-        $response["message"] = "Oops! Versuch es später noch einmal";  
-        echo json_encode($response);
+			$response["status"] = 400;
+        	$response["message"] = "Es wurden nicht alle Datensätze übertragen!";  
+        	echo json_encode($response);
 		}
-}else{
-		$response["status"] = 400;
-        $response["message"] = "Jemand anderes bearbeitet diese Aufgabe bereits!";  
-        echo json_encode($response);
-}
 
-}else{
-		$response["status"] = 400;
-        $response["message"] = "Oops! Versuch es später noch einmal";  
-        echo json_encode($response);
-}
+
 ?>
