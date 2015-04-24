@@ -99,7 +99,7 @@ if(($result->rowCount())>0){
    }
 $db->commit();
 $response["status"] = 200;
-$response["message"] = "Liste aktualisiert.";
+$response["message"] = "Freundeslisteliste aktualisiert.";
 echo json_encode($response);
 }else{
   $response["status"] = 400;
