@@ -10,11 +10,12 @@ $search=$_POST['search'];
 $status_if_already_in_event=1;
 $status_if_not_in_event=0;
 $status_friended=2;
+$empty_string="";
 
 require_once 'db_connect.php';
 
-if($search==""){
-      if($result= $db->prepare("SELECT * FROM user INNER JOIN friends ON (user.user_id= friends.user_a OR user.user_id= friends.user_b) WHERE user.user_id NOT LIKE '$admin_id' AND (friends.user_a='$admin_id' OR friends.user_b='$admin_id') AND friends.status='$status_friended' ORDER BY user.name")){
+if($empty_string==""){
+      if($result= $db->prepare("SELECT * FROM user INNER JOIN friends ON (user.user_id= friends.user_a OR user.user_id= friends.user_b) WHERE user.user_id NOT LIKE :admin_id AND (friends.user_a=:admin_id OR friends.user_b=:admin_id) AND friends.status=:status_friended ORDER BY user.name")){
         $db->beginTransaction();
         $result->bindParam(':admin_id', $admin_id);
         $result->bindValue(':status_friended', $status_friended);
@@ -25,7 +26,7 @@ if($search==""){
         echo json_encode($response);
       }
 }else{
-      if($result= $db->prepare("SELECT * FROM user INNER JOIN friends ON (user.user_id= friends.user_a OR user.user_id= friends.user_b) WHERE (user.name= '$search' OR user.prename='$search' OR user.email='$search') AND user.user_id NOT LIKE '$admin_id' AND (friends.user_a='$admin_id' OR friends.user_b='$admin_id') AND friends.status='$status_friended' ORDER BY user.name")){
+      if($result= $db->prepare("SELECT * FROM user INNER JOIN friends ON (user.user_id= friends.user_a OR user.user_id= friends.user_b) WHERE (user.name= :search OR user.prename=:search OR user.email=:search) AND user.user_id NOT LIKE :admin_id AND (friends.user_a=:admin_id OR friends.user_b=:admin_id) AND friends.status=:status_friended ORDER BY user.name")){
         $db->beginTransaction();
         $result->bindParam(':admin_id', $admin_id);
         $result->bindParam(':search', $search);

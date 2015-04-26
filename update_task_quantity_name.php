@@ -2,10 +2,10 @@
 
 $response= array();
 
-if(isset($_POST['task_id'])&&isset($_POST['editor_id'])&&isset($_POST['task'])&&isset($_POST['quantity'])){
+if(isset($_POST['task_id'])&&isset($_POST['admin_id'])&&isset($_POST['task'])&&isset($_POST['quantity'])){
 
 $task_id = $_POST['task_id'];
-$editor_id = $_POST['editor_id'];
+$editor_id = $_POST['admin_id'];
 $task = $_POST['task'];
 $quantity = $_POST['quantity'];
 $status_inactive = -1;

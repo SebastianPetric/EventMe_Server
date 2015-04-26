@@ -14,7 +14,7 @@ require_once 'db_connect.php';
 $check= $db->prepare("SELECT * FROM task WHERE task_id=:task_id AND editor_id=:editor");
 
 			if($check){
-				//Check if Task has no editor
+			//Check if Task has no editor
 			$db->beginTransaction();
         		$check->bindParam(':task_id', $task_id);
         		$check->bindParam(':editor', $status_inactive);
