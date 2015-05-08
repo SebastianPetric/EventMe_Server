@@ -14,10 +14,8 @@ if($get_task_data= $db->prepare("SELECT * FROM task WHERE event_id=:event_id ORD
     $get_task_data->execute();   
 
     if(($get_task_data->rowCount())>0){
-    	
     	$response["tasks"] = array();
     	$task=array();
-
 		foreach ($get_task_data as $row) {
     		$task["task_id"]=$row["task_id"];
 			$task["event_id"]=$row["event_id"];
@@ -32,7 +30,6 @@ if($get_task_data= $db->prepare("SELECT * FROM task WHERE event_id=:event_id ORD
 			if($get_editor= $db->prepare("SELECT name FROM user WHERE user_id=:editor_id")){
 				$get_editor->bindParam(':editor_id', $editor_id);
     			$get_editor->execute(); 
-
     			if(($get_editor->rowCount())>0){
     				foreach ($get_editor as $row_name) {
     					$task["editor_name"]=$row_name["name"];
@@ -40,7 +37,6 @@ if($get_task_data= $db->prepare("SELECT * FROM task WHERE event_id=:event_id ORD
     			}else{
     				$task["editor_name"]=$status_inactive;
     			}
-				
 			}else{
 				$db -> rollBack ();
 				$response["status"]=400;
@@ -70,5 +66,4 @@ $db=null;
     $response["message"]="Es wurden nicht alle Datensätze übertragen!";
     echo json_encode($response);
 }
-
 ?>

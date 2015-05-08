@@ -15,9 +15,11 @@ $empty_string="";
 require_once 'db_connect.php';
 
 if($empty_string==""){
-      if($result= $db->prepare("SELECT * FROM user INNER JOIN friends ON (user.user_id= friends.user_a OR user.user_id= friends.user_b) WHERE user.user_id NOT LIKE :admin_id AND (friends.user_a=:admin_id OR friends.user_b=:admin_id) AND friends.status=:status_friended ORDER BY user.name")){
+      if($result= $db->prepare("SELECT * FROM user INNER JOIN friends ON (user.user_id= friends.user_a OR user.user_id= friends.user_b) WHERE user.user_id NOT LIKE :admin_id AND (friends.user_a=:admin1_id OR friends.user_b=:admin2_id) AND friends.status=:status_friended ORDER BY user.name")){
         $db->beginTransaction();
         $result->bindParam(':admin_id', $admin_id);
+        $result->bindParam(':admin1_id', $admin_id);
+        $result->bindParam(':admin2_id', $admin_id);
         $result->bindValue(':status_friended', $status_friended);
         $result->execute();   
       }else{
@@ -26,10 +28,14 @@ if($empty_string==""){
         echo json_encode($response);
       }
 }else{
-      if($result= $db->prepare("SELECT * FROM user INNER JOIN friends ON (user.user_id= friends.user_a OR user.user_id= friends.user_b) WHERE (user.name= :search OR user.prename=:search OR user.email=:search) AND user.user_id NOT LIKE :admin_id AND (friends.user_a=:admin_id OR friends.user_b=:admin_id) AND friends.status=:status_friended ORDER BY user.name")){
+      if($result= $db->prepare("SELECT * FROM user INNER JOIN friends ON (user.user_id= friends.user_a OR user.user_id= friends.user_b) WHERE (user.name= :search OR user.prename=:search1 OR user.email=:search2) AND user.user_id NOT LIKE :admin_id AND (friends.user_a=:admin1_id OR friends.user_b=:admin2_id) AND friends.status=:status_friended ORDER BY user.name")){
         $db->beginTransaction();
         $result->bindParam(':admin_id', $admin_id);
+        $result->bindParam(':admin1_id', $admin_id);
+        $result->bindParam(':admin2_id', $admin_id);
         $result->bindParam(':search', $search);
+        $result->bindParam(':search1', $search);
+        $result->bindParam(':search2', $search);
         $result->bindValue(':status_friended', $status_friended);
         $result->execute();  
       }else{
@@ -41,7 +47,6 @@ if($empty_string==""){
 
 if(($result->rowCount())>0){
    $response["users"] = array();
-
    foreach ($result as $row) {
     $user = array();
     $user["user_id"] = $row["user_id"];
@@ -63,7 +68,6 @@ if(($result->rowCount())>0){
         }
     array_push($response["users"], $user);
    }
-
 $db->commit();
 $response["status"] = 200;
 $response["message"] = "Organisatorenliste aktualisiert.";

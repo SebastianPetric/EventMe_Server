@@ -23,7 +23,7 @@ $check= $db->prepare("SELECT * FROM task WHERE task_id=:task_id AND editor_id=:e
         		if(($check-> rowCount())>0){
         			$db->rollBack();
 				$response["status"] = 400;
-        			$response["message"] = "Du musst dich erst für diese Aufgabe locken!";  
+        			$response["message"] = "Diese Aufgabe muss erst zugeordnet werden!";  
         			echo json_encode($response);
         		}else{
         			//Check if you are Editor of Task
@@ -50,13 +50,13 @@ $check= $db->prepare("SELECT * FROM task WHERE task_id=:task_id AND editor_id=:e
         				}
         			}else{
         				$db->rollBack();
-						$response["status"] = 400;
+					$response["status"] = 400;
         				$response["message"] = "Jemand anderes bearbeitet diese Aufgabe bereits!";  
         				echo json_encode($response);
 					}
         		}
 			}else{
-				$response["status"] = 400;
+			$response["status"] = 400;
         		$response["message"] = "Oops! Versuch es später noch einmal";  
         		echo json_encode($response);
 			}

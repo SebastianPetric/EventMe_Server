@@ -9,7 +9,7 @@ if(isset($_POST['email']) && isset($_POST['password'])){
 
     require_once 'db_connect.php';
           
-    if($login = $db->prepare("SELECT * FROM `user` WHERE `email` = :email")){
+    if($login = $db->prepare("SELECT * FROM user WHERE email= :email")){
         $db->beginTransaction();
         $login->bindParam(':email', $email);
         $login->execute();
@@ -47,5 +47,4 @@ if(isset($_POST['email']) && isset($_POST['password'])){
     $response["message"] = "Es wurden nicht alle Datensätze übertragen!";
     echo json_encode($response);
 }
- 
 ?>

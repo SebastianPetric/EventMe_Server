@@ -11,18 +11,22 @@ $status_friended=2;
 
 require_once 'db_connect.php';
 
-$delete_friend= $db->prepare("DELETE FROM friends WHERE ((user_a,user_b)= (:usera_id,:userb_id) OR (user_a,user_b)= (:userb_id,:usera_id))");
+$delete_friend= $db->prepare("DELETE FROM friends WHERE ((user_a,user_b)= (:usera_id,:userb_id) OR (user_a,user_b)= (:userb1_id,:usera1_id))");
 
-if($check_if_delete_friend = $db->prepare("SELECT * FROM friends WHERE ((user_a,user_b)= (:usera_id,:userb_id) OR (user_a,user_b)= (:userb_id,:usera_id)) AND status=:status_friended")){ 
+if($check_if_delete_friend = $db->prepare("SELECT * FROM friends WHERE ((user_a,user_b)= (:usera_id,:userb_id) OR (user_a,user_b)= (:userb1_id,:usera1_id)) AND status=:status_friended")){ 
 				$db->beginTransaction();
 				$check_if_delete_friend->bindParam(':usera_id', $usera_id);
                 $check_if_delete_friend->bindParam(':userb_id', $userb_id);
+                $check_if_delete_friend->bindParam(':usera1_id', $usera_id);
+                $check_if_delete_friend->bindParam(':userb1_id', $userb_id);
                 $check_if_delete_friend->bindParam(':status_friended', $status_friended);
                 $check_if_delete_friend->execute();
                 if(($check_if_delete_friend->rowCount())>0){
                 	if($delete_friend){
                 		$delete_friend->bindParam(':usera_id', $usera_id);
                 		$delete_friend->bindParam(':userb_id', $userb_id);
+                		$delete_friend->bindParam(':usera1_id', $usera_id);
+                		$delete_friend->bindParam(':userb1_id', $userb_id);
                 		$delete_friend->execute();
                 		if($delete_friend){
 							$db -> commit();

@@ -12,7 +12,6 @@ if(isset($_POST['admin_id'])){
     $checkForNotification= mysql_query("SELECT * FROM friends WHERE user_b='$admin_id' AND status='$status_open'");
     
     if(mysql_num_rows($checkForNotification)>0){
-
         $response["status"] = 200;
         $response["message"] = "Freundschaftsanfrage erhalten!";
         echo json_encode($response);

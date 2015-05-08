@@ -9,9 +9,10 @@ $editor_id = $_POST['admin_id'];
 $task = $_POST['task'];
 $quantity = $_POST['quantity'];
 $status_inactive = -1;
+$task_name_temp;
+$task_quantity_temp;
 
 require_once 'db_connect.php';
-
 
 if($check_editor=$db->prepare("SELECT * FROM task WHERE task_id=:task_id AND editor_id=:editor")){
         $db->beginTransaction();
@@ -26,7 +27,7 @@ if($check_editor=$db->prepare("SELECT * FROM task WHERE task_id=:task_id AND edi
 
             if(($check_editor->rowCount())>0){
                 $response["status"]=400;
-                $response["message"]="Du musst dich erst für die Aufgabe locken.";
+                $response["message"]="Diese Aufgabe muss erst zugeordnet werden!";
                 echo json_encode($response);
             }else{
                 $response["status"]=400;
@@ -34,6 +35,10 @@ if($check_editor=$db->prepare("SELECT * FROM task WHERE task_id=:task_id AND edi
                 echo json_encode($response);
             }
         }else{
+          foreach ($check_editor as $row) {
+            $task_name_temp=$row['task'];
+            $task_quantity_temp=$row['quantity'];
+          }
 
 if($task!=""){
 if($update_task=$db->prepare("UPDATE task SET task=:task_name WHERE task_id=:task_id")){
@@ -41,10 +46,29 @@ if($update_task=$db->prepare("UPDATE task SET task=:task_name WHERE task_id=:tas
                 $update_task->bindParam(':task_name', $task);
                 $update_task->execute();
                 if($update_task){
-                  $db->commit();
-                  $response["status"]=200;
-                  $response["message"]="Name der Aufgabe geändert.";
-                  echo json_encode($response);
+                  if($update_history=$db->prepare("INSERT INTO task_history (task_id,user_id,comment) VALUES (:task_id,:user_id,:comment)")){
+                  $update_history->bindParam(':task_id', $task_id);
+                  $update_history->bindParam(':user_id', $editor_id);
+                  $comment="hat den Namen der Aufgabe von " ."\"". $task_name_temp."\"". " zu "."\"". $task."\"". " geändert.";
+                  $update_history->bindParam(':comment', $comment);
+                  $update_history->execute();
+                    if($update_history){
+                        $db->commit();
+                        $response["status"]=200;
+                        $response["message"]="Name der Aufgabe geändert.";
+                        echo json_encode($response);
+                    }else{
+                      $db->rollBack();
+                      $response["status"]=400;
+                      $response["message"]="Oops. Versuchen Sie es später noch einmal.";
+                      echo json_encode($response);
+                    }
+                  }else{
+                    $db->rollBack();
+                    $response["status"]=400;
+                    $response["message"]="Oops. Versuchen Sie es später noch einmal.";
+                    echo json_encode($response);
+                  }
                 }else{
                   $db->rollBack();
                   $response["status"]=400;
@@ -64,10 +88,29 @@ if($quantity!=""){
                 $update_quantity->bindParam(':quantity', $quantity);
                 $update_quantity->execute();
                 if($update_quantity){
-                  $db->commit();
-                  $response["status"]=200;
-                  $response["message"]="Menge erfolgreich geändert.";
-                  echo json_encode($response);
+                     if($update_history=$db->prepare("INSERT INTO task_history (task_id,user_id,comment) VALUES (:task_id,:user_id,:comment)")){
+                        $update_history->bindParam(':task_id', $task_id);
+                        $update_history->bindParam(':user_id', $editor_id);
+                        $comment="hat die Menge von " ."\"". $task_quantity_temp."\"". " auf "."\"". $quantity."\"". " geändert.";
+                        $update_history->bindParam(':comment', $comment);
+                        $update_history->execute();
+                    if($update_history){
+                       $db->commit();
+                       $response["status"]=200;
+                       $response["message"]="Menge erfolgreich geändert.";
+                       echo json_encode($response);
+                    }else{
+                      $db->rollBack();
+                      $response["status"]=400;
+                      $response["message"]="Oops. Versuchen Sie es später noch einmal.";
+                      echo json_encode($response);
+                    }
+                  }else{
+                    $db->rollBack();
+                    $response["status"]=400;
+                    $response["message"]="Oops. Versuchen Sie es später noch einmal.";
+                    echo json_encode($response);
+                  }
                 }else{
                   $db->rollBack();
                   $response["status"]=400;

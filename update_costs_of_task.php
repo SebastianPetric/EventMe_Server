@@ -70,7 +70,6 @@ if($check){
     							echo json_encode($response);
         					}	
         			}
-        		
         	}else{
         			$db->rollBack();
         			$response["status"] = 400;
@@ -86,7 +85,7 @@ if($check){
         	}else{
         		$db->rollBack();
         		$response["status"] = 400;
-        		$response["message"] = "Du musst dich erst für diese Aufgabe locken!";  
+        		$response["message"] = "Diese Aufgabe muss erst zugeordnet werden!";  
         		echo json_encode($response);
         	}
 }else{
@@ -100,5 +99,4 @@ $db=null;
     $response["message"] = "Es wurden nicht alle Datensätze übertragen!";  
     echo json_encode($response);
 }
-
 ?>

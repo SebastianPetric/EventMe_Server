@@ -14,7 +14,7 @@ $status_have_to_accept=3;
 $status_unfriended=1;
 $status_friended=2;
 
- $check= $db->prepare("SELECT * FROM friends WHERE ((user_a,user_b)= (:admin_id,:userb_id) OR (user_a,user_b)= (:userb_id,:admin_id)) AND status=:status");
+ $check= $db->prepare("SELECT * FROM friends WHERE ((user_a,user_b)= (:admin_id,:userb_id) OR (user_a,user_b)= (:userb1_id,:admin1_id)) AND status=:status");
 
 if($search==""){
       if($result= $db->prepare("SELECT * FROM user WHERE user_id NOT LIKE :admin_id")){
@@ -27,10 +27,12 @@ if($search==""){
         echo json_encode($response);
       }
 }else{
-      if($result= $db->prepare("SELECT * FROM user WHERE (name= :search OR prename=:search OR email=:search) AND user_id NOT LIKE :admin_id")){
+      if($result= $db->prepare("SELECT * FROM user WHERE (name= :search OR prename=:search1 OR email=:search2) AND user_id NOT LIKE :admin_id")){
         $db->beginTransaction();
         $result->bindParam(':admin_id', $admin_id);
         $result->bindParam(':search', $search);
+        $result->bindParam(':search1', $search);
+        $result->bindParam(':search2', $search);
         $result->execute();  
       }else{
         $response["status"]=400;
@@ -54,6 +56,8 @@ if(($result->rowCount())>0){
       //Check if status Open
       $check->bindParam(':admin_id', $admin_id);
       $check->bindParam(':userb_id', $userb_id);
+      $check->bindParam(':admin1_id', $admin_id);
+      $check->bindParam(':userb1_id', $userb_id);
       $check->bindParam(':status', $status_open);
       $check->execute();  
 
@@ -77,9 +81,11 @@ if(($result->rowCount())>0){
             echo json_encode($response);
           }
       }else{
-        //Check if status Friended
+      //Check if status Friended
       $check->bindParam(':admin_id', $admin_id);
       $check->bindParam(':userb_id', $userb_id);
+      $check->bindParam(':admin1_id', $admin_id);
+      $check->bindParam(':userb1_id', $userb_id);
       $check->bindParam(':status', $status_friended);
       $check->execute();  
 

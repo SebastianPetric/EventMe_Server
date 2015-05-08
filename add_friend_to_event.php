@@ -14,7 +14,6 @@ if($add_friend_to_event = $db->prepare("INSERT INTO event_user (event_id,user_id
 				$add_friend_to_event->bindParam(':event_id', $event_id);
                 $add_friend_to_event->bindParam(':user_id', $user_id);
                 $add_friend_to_event->execute();
-
                 if($add_friend_to_event){
                 	$db -> commit ();
     				$response["status"] = 200;

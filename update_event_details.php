@@ -10,10 +10,11 @@ $task="task";
 
 require_once 'db_connect.php';
 
-if($get_all_events= $db->prepare("SELECT * FROM event INNER JOIN event_user WHERE event.event_id=:event_id AND event_user.user_id=:admin_id AND event_user.event_id=:event_id")){
+if($get_all_events= $db->prepare("SELECT * FROM event INNER JOIN event_user WHERE event.event_id=:event_id AND event_user.user_id=:admin_id AND event_user.event_id=:event1_id")){
 			$db->beginTransaction();
         	$get_all_events->bindParam(':event_id', $event_id);
         	$get_all_events->bindParam(':admin_id', $admin_id);
+            $get_all_events->bindParam(':event1_id', $event_id);
         	$get_all_events->execute();
 
         	if(($get_all_events->rowCount())>0){
@@ -64,7 +65,7 @@ if($get_all_events= $db->prepare("SELECT * FROM event INNER JOIN event_user WHER
         	}else{
         		$db->rollBack();
         		$response["status"]=400;
- 				//$response["message"]="Zur Zeit keine Events!";
+ 				$response["message"]="Zur Zeit keine Events!";
  				echo json_encode($response);
         	}
 }else{

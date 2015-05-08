@@ -4,7 +4,7 @@ $response= array();
 if(isset($_POST['admin_id'])){
 
 $admin_id = $_POST['admin_id'];
-$status_open=1;
+$status_open=0;
 
 require_once 'db_connect.php';
 
@@ -62,12 +62,12 @@ if($result= $db->prepare("SELECT * FROM event INNER JOIN event_user ON event.eve
      }
      $db -> commit ();
      $response["status"]=200;
-     $response["message"]="Alle Events aktualisiert.";
+     $response["message"]="Archivierte Events geladen.";
      echo json_encode($response);  
     }else{
         $db -> rollBack ();
         $response["status"]=400;
-        $response["message"]="Bisher keine Events.";
+        $response["message"]="Keine archivierten Events vorhanden.";
         echo json_encode($response);
     }
 }else{

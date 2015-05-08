@@ -37,12 +37,13 @@ $edit_editor = $db->prepare("UPDATE task SET editor_id=:editor_id WHERE task_id=
                                         $response["message"] = "Sie sind der neue Bearbeiter der Aufgabe!";
                                         echo json_encode($response);
                                 }else {
-                                        $db -> rollBack (); 
+                                      $db -> rollBack (); 
                                       $response["status"] = 400;
                                       $response["message"] = "Oops! Versuch es später noch einmal";  
                                       echo json_encode($response);  
                                 }
                         }else {
+                                $db -> rollBack (); 
                                 $response["status"] = 400;
                                 $response["message"] = "Oops! Versuch es später noch einmal";  
                                 echo json_encode($response);  

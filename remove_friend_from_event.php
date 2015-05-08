@@ -15,7 +15,6 @@ if($remove_friend_from_event = $db->prepare("DELETE FROM event_user WHERE user_i
                 $remove_friend_from_event->bindParam(':user_id', $user_id);
                 $remove_friend_from_event->bindParam(':event_id', $event_id);
                 $remove_friend_from_event->execute();
-
                 if($remove_friend_from_event){
                   if($update_tasks = $db->prepare("UPDATE task SET editor_id=:task_inactive WHERE editor_id=:user_id AND event_id=:event_id")){    
                   $update_tasks->bindParam(':task_inactive', $task_inactive);
@@ -38,8 +37,7 @@ if($remove_friend_from_event = $db->prepare("DELETE FROM event_user WHERE user_i
                   $response["status"] = 400;
                   $response["message"] = "Oops. Da ist ein Fehler aufgetreten!";
                   echo json_encode($response);
-                }
-                  
+                }  
                 }else{
                   $db -> rollBack (); 
                   $response["status"] = 400;
@@ -57,5 +55,4 @@ if($remove_friend_from_event = $db->prepare("DELETE FROM event_user WHERE user_i
    $response["message"]="Es wurden nicht alle Datensätze übertragen!";
    echo json_encode($response);
 }
-
 ?>

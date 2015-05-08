@@ -13,12 +13,14 @@ $status_friended=2;
 
 require_once 'db_connect.php';
 
- $check= $db->prepare("SELECT * FROM friends WHERE ((user_a,user_b)= (:admin_id,:userb_id) OR (user_a,user_b)= (:userb_id,:admin_id)) AND status=:status");
+$check= $db->prepare("SELECT * FROM friends WHERE ((user_a,user_b)= (:admin_id,:userb_id) OR (user_a,user_b)= (:userb1_id,:admin1_id)) AND status=:status");
 
 if($search==""){
-      if($result= $db->prepare("SELECT * FROM user INNER JOIN friends ON (user.user_id= friends.user_a OR user.user_id= friends.user_b) WHERE user.user_id NOT LIKE :admin_id AND (friends.user_a=:admin_id OR friends.user_b=:admin_id) AND (friends.status=:status_friended OR friends.status=:status_open)  ORDER BY user.name")){
+      if($result= $db->prepare("SELECT * FROM user INNER JOIN friends ON (user.user_id= friends.user_a OR user.user_id= friends.user_b) WHERE user.user_id NOT LIKE :admin_id AND (friends.user_a=:admin1_id OR friends.user_b=:admin2_id) AND (friends.status=:status_friended OR friends.status=:status_open)  ORDER BY user.name")){
         $db->beginTransaction();
         $result->bindValue(':admin_id', $admin_id);
+        $result->bindValue(':admin1_id', $admin_id);
+        $result->bindValue(':admin2_id', $admin_id);
         $result->bindValue(':status_open', $status_open);
         $result->bindValue(':status_friended', $status_friended);
         $result->execute(); 
@@ -28,10 +30,14 @@ if($search==""){
         echo json_encode($response);
       }
 }else{
-      if($result= $db->prepare("SELECT * FROM user INNER JOIN friends ON (user.user_id= friends.user_a OR user.user_id= friends.user_b) WHERE (user.name= (:search) OR user.prename=(:search) OR user.email=(:search)) AND user.user_id NOT LIKE :admin_id AND (friends.user_a=:admin_id OR friends.user_b=:admin_id) AND (friends.status=:status_friended OR friends.status=:status_open) ORDER BY friends.status")){
+      if($result= $db->prepare("SELECT * FROM user INNER JOIN friends ON (user.user_id= friends.user_a OR user.user_id= friends.user_b) WHERE (user.name= (:search) OR user.prename=(:search1) OR user.email=(:search2)) AND user.user_id NOT LIKE :admin_id AND (friends.user_a=:admin1_id OR friends.user_b=:admin2_id) AND (friends.status=:status_friended OR friends.status=:status_open) ORDER BY friends.status")){
         $db->beginTransaction();
         $result->bindParam(':admin_id', $admin_id);
+        $result->bindParam(':admin1_id', $admin_id);
+        $result->bindParam(':admin2_id', $admin_id);
         $result->bindParam(':search', $search);
+        $result->bindParam(':search1', $search);
+        $result->bindParam(':search2', $search);
         $result->bindParam(':status_open', $status_open);
         $result->bindParam(':status_friended', $status_friended);
         $result->execute();   
@@ -56,6 +62,8 @@ if(($result->rowCount())>0){
       //Check if status Open
       $check->bindParam(':admin_id', $admin_id);
       $check->bindParam(':userb_id', $userb_id);
+      $check->bindParam(':admin1_id', $admin_id);
+      $check->bindParam(':userb1_id', $userb_id);
       $check->bindParam(':status', $status_open);
       $check->execute();  
 
@@ -82,6 +90,8 @@ if(($result->rowCount())>0){
         //Check if status Friended
       $check->bindParam(':admin_id', $admin_id);
       $check->bindParam(':userb_id', $userb_id);
+      $check->bindParam(':admin1_id', $admin_id);
+      $check->bindParam(':userb1_id', $userb_id);
       $check->bindParam(':status', $status_friended);
       $check->execute();  
 

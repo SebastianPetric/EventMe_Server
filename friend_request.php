@@ -11,14 +11,16 @@ if(isset($_POST['usera_id'])&&isset($_POST['userb_id'])){
 
     require_once 'db_connect.php';
 
-    $check=$db->prepare("SELECT * FROM friends WHERE ((user_a,user_b)= (:usera_id,:userb_id) OR (user_a,user_b)= (:userb_id,:usera_id)) AND status =:status");
-    $updateStatus= $db->prepare("UPDATE friends SET status=:status WHERE ((user_a,user_b)= (:usera_id,:userb_id) OR (user_a,user_b)= (:userb_id,:usera_id))");
+    $check=$db->prepare("SELECT * FROM friends WHERE ((user_a,user_b)= (:usera_id,:userb_id) OR (user_a,user_b)= (:userb1_id,:usera1_id)) AND status =:status");
+    $updateStatus= $db->prepare("UPDATE friends SET status=:status WHERE ((user_a,user_b)= (:usera_id,:userb_id) OR (user_a,user_b)= (:userb1_id,:usera1_id))");
 
     if($check){
         //Check if already Friendrequest sended
         $db->beginTransaction();
         $check->bindParam(':usera_id', $usera_id);
         $check->bindParam(':userb_id', $userb_id);
+        $check->bindParam(':usera1_id', $usera_id);
+        $check->bindParam(':userb1_id', $userb_id);
         $check->bindParam(':status', $status_open);
         $check->execute();
 
@@ -26,6 +28,8 @@ if(isset($_POST['usera_id'])&&isset($_POST['userb_id'])){
             //Check if already Friended
             $check->bindParam(':usera_id', $usera_id);
             $check->bindParam(':userb_id', $userb_id);
+            $check->bindParam(':usera1_id', $usera_id);
+            $check->bindParam(':userb1_id', $userb_id);
             $check->bindParam(':status', $status_friended);
             $check->execute();
             if(($check-> rowCount())==0){
@@ -62,6 +66,8 @@ if(isset($_POST['usera_id'])&&isset($_POST['userb_id'])){
                 if($updateStatus){
                     $updateStatus->bindParam(':usera_id', $usera_id);
                     $updateStatus->bindParam(':userb_id', $userb_id);
+                    $updateStatus->bindParam(':usera1_id', $usera_id);
+                    $updateStatus->bindParam(':userb1_id', $userb_id);
                     $updateStatus->bindParam(':status', $status_friended);
                     $updateStatus->execute();
                     if($updateStatus){
