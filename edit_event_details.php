@@ -126,7 +126,18 @@ if($update_date=$db->prepare("UPDATE event SET date=:date WHERE event_id=:event_
                   if($update_history=$db->prepare("INSERT INTO event_history (event_id,user_id,comment) VALUES (:event_id,:user_id,:comment)")){
                   $update_history->bindParam(':event_id', $event_id);
                   $update_history->bindParam(':user_id', $admin_id);
-                  $comment="hat das Datum des Events von " ."\"". $event_date_temp."\"". " auf "."\"". $date."\"". " geändert.";
+                 
+                  $oldDate = strtotime($event_date_temp);
+                  $oldDateDayMonth=date('d.m', $event_date_temp);
+                  $oldDateYear=date('Y', $event_date_temp)-1900;
+                  $oldDate= $oldDateDayMonth.'.'.$oldDateYear;
+
+                  $newdate = strtotime($date);
+                  $dateDayMonth=date('d.m', $newdate);
+                  $dateYear=date('Y', $newdate)-1900;
+                  $newDate= $dateDayMonth.'.'.$dateYear;
+
+                  $comment="hat das Datum des Events von " ."\"". $oldDate."\"". " auf "."\"". $newDate."\"". " geändert.";
                   $update_history->bindParam(':comment', $comment);
                   $update_history->execute();
                     if($update_history){
@@ -159,17 +170,6 @@ if($update_date=$db->prepare("UPDATE event SET date=:date WHERE event_id=:event_
     echo json_encode($response);
     }
 }
-
-
-
-
-
-
-
-
-
-
-
 }
 }else{
   $response["status"]=400;

@@ -79,5 +79,4 @@ $db=null;
     $response["message"] = "Es wurden nicht alle Datensätze übertragen!";  
     echo json_encode($response);
 	}
-
 ?>

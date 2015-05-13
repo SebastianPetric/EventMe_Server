@@ -15,18 +15,18 @@ if($get_comments=$db->prepare("SELECT * FROM event_history WHERE event_id=:event
     $get_comments->bindParam(':event_id', $event_id);
     $get_comments->execute();  
     if(($get_comments->rowCount())>0){
-    	
-    	foreach ($get_comments as $rowComment) {
+        
+        foreach ($get_comments as $rowComment) {
     	$editor_id_temp= $rowComment['user_id'];
     	$comment_temp=$rowComment["comment"];
         $timestamp = $rowComment["created_at"];
         $date_timestamp = strtotime($timestamp);
         $actual_date=date('H:i, M d', $date_timestamp);
-    	
+    
     	$get_editor_name->bindParam(':user_id', $editor_id_temp);
    		$get_editor_name->execute();
-
-   		foreach ($get_editor_name as $rowEditor) {
+   		
+        foreach ($get_editor_name as $rowEditor) {
    			$editor_name= $rowEditor['name'];
    		}
    		$str.=nl2br($actual_date .' | '.$editor_name .': '. $comment_temp."\n".'----------------------'."\n");

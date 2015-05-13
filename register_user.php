@@ -15,14 +15,13 @@ if (isset($_POST['name']) && isset($_POST['prename']) && isset($_POST['email'])&
         $db->beginTransaction();
         $email_already_registered->bindParam(':email', $email);
         $email_already_registered->execute();
-
          if(($email_already_registered->rowCount())==0){
-
             if($registration = $db->prepare("INSERT INTO user(name, prename, email,password) VALUES(:name, :prename, :email, :password)")){
                 $registration->bindParam(':name', $name);
                 $registration->bindParam(':prename', $prename);
+                $encrypted_password=md5($password);
                 $registration->bindParam(':email', $email);
-                $registration->bindParam(':password', $password);
+                $registration->bindParam(':password', $encrypted_password);
                 $registration->execute();
         if ($registration) {
             $db -> commit (); 

@@ -23,7 +23,6 @@ if($create_task = $db->prepare("INSERT INTO task (event_id,task,editor_id,quanti
                 $create_task->bindParam(':quantity', $quantity);
                 $create_task->execute();
                 if ($create_task) {
-
                     if($description!=$empty_string){
                     if($get_task_id=$db->prepare("SELECT task_id FROM task WHERE event_id=:event_id AND task=:task AND editor_id=:editor_id AND quantity=:quantity")){
                         $get_task_id->bindParam(':event_id', $event_id);
@@ -31,17 +30,14 @@ if($create_task = $db->prepare("INSERT INTO task (event_id,task,editor_id,quanti
                         $get_task_id->bindParam(':editor_id', $editor_id);
                         $get_task_id->bindParam(':quantity', $quantity);
                         $get_task_id->execute();
-
                         foreach ($get_task_id as $row) {
                             $task_id= $row["task_id"];
                         }
-
                          if($insert_comment = $db->prepare("INSERT INTO task_history (task_id,user_id,comment) VALUES (:task_id,:user_id,:comment)")){
                             $insert_comment->bindParam(':task_id', $task_id);
                             $insert_comment->bindParam(':user_id', $admin_id);
                             $insert_comment->bindParam(':comment', $description);
                             $insert_comment->execute();
-
                              if($insert_comment){
                                 //Add User as an organizer, if he isn't already in it
                                 if($editor_id!=$inactive_editor){

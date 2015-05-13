@@ -13,7 +13,6 @@ if(isset($_POST['usera_id'])&&isset($_POST['userb_id'])){
 
     $check=$db->prepare("SELECT * FROM friends WHERE ((user_a,user_b)= (:usera_id,:userb_id) OR (user_a,user_b)= (:userb1_id,:usera1_id)) AND status =:status");
     $updateStatus= $db->prepare("UPDATE friends SET status=:status WHERE ((user_a,user_b)= (:usera_id,:userb_id) OR (user_a,user_b)= (:userb1_id,:usera1_id))");
-
     if($check){
         //Check if already Friendrequest sended
         $db->beginTransaction();
@@ -23,7 +22,6 @@ if(isset($_POST['usera_id'])&&isset($_POST['userb_id'])){
         $check->bindParam(':userb1_id', $userb_id);
         $check->bindParam(':status', $status_open);
         $check->execute();
-
         if(($check->rowCount())==0){
             //Check if already Friended
             $check->bindParam(':usera_id', $usera_id);

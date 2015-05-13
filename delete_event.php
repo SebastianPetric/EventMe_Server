@@ -19,6 +19,10 @@ if($check_if_you_are_admin_of_event = $db->prepare("SELECT owner FROM event WHER
                     $delete_event->bindParam(':event_id', $event_id);
                     $delete_event->execute();
                     if($delete_event){
+                       if($delete_event_history=$db->prepare("DELETE FROM event_history WHERE event_id=:event_id")){
+                          $delete_event_history->bindParam(':event_id', $event_id);
+                          $delete_event_history->execute();
+                          if($delete_event_history){
                       if($delete_user_event=$db->prepare("DELETE FROM event_user WHERE event_id=:event_id")){
                       $delete_user_event->bindParam(':event_id', $event_id);
                       $delete_user_event->execute();
@@ -43,10 +47,10 @@ if($check_if_you_are_admin_of_event = $db->prepare("SELECT owner FROM event WHER
                                 $delete_tasks_of_event->bindParam(':event_id', $event_id);
                                 $delete_tasks_of_event->execute();
                                 if($delete_tasks_of_event){
-                                  $db -> commit (); 
-                                  $response["status"]=200;
-                                  $response["message"]="Event erfolgeich gelöscht.";
-                                  echo json_encode($response);
+                                        $db -> commit (); 
+                                        $response["status"]=200;
+                                        $response["message"]="Event erfolgeich gelöscht.";
+                                        echo json_encode($response);
                                 }else{
                                   $db -> rollBack (); 
                                   $response["status"]=400;
@@ -78,6 +82,18 @@ if($check_if_you_are_admin_of_event = $db->prepare("SELECT owner FROM event WHER
                         echo json_encode($response);
                       }
                     }else{
+                      $db->rollBack();
+                      $response["status"]=400;
+                      $response["message"]="Oops! Versuch es später noch einmal";
+                      echo json_encode($response);
+                    }
+                  }else{
+                      $db->rollBack();
+                      $response["status"]=400;
+                      $response["message"]="Oops! Versuch es später noch einmal";
+                      echo json_encode($response);
+                    }
+                  }else{
                       $db->rollBack();
                       $response["status"]=400;
                       $response["message"]="Oops! Versuch es später noch einmal";

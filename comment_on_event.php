@@ -27,7 +27,6 @@ if($insert_comment=$db->prepare("INSERT INTO event_history (event_id,user_id,com
                   $response["message"]="Oops. Versuchen Sie es später noch einmal.";
                   echo json_encode($response);
                 }
-
 }else{
 	$response["status"]=400;
     $response["message"]="Oops. Versuchen Sie es später noch einmal.";

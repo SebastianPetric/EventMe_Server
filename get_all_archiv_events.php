@@ -22,12 +22,10 @@ if($result= $db->prepare("SELECT * FROM event INNER JOIN event_user ON event.eve
             $get_organizers->bindParam(':event_id', $event_id);
             $get_organizers->execute();
             $event["num_organizers_event"]=$get_organizers->rowCount();
-
             if($get_tasks=$db->prepare("SELECT * FROM task WHERE event_id=:event_id")){
             //Get all Tasks in that event
             $get_tasks->bindParam(':event_id', $event_id);
             $get_tasks->execute();
-
                  if($get_tasks->rowCount()>0){
                     $event["costs_of_event"]=0;
                     $event["percentage_of_event"]=0;

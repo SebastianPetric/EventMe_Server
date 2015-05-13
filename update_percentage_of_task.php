@@ -66,6 +66,4 @@ $check= $db->prepare("SELECT * FROM task WHERE task_id=:task_id AND editor_id=:e
         	$response["message"] = "Es wurden nicht alle Datensätze übertragen!";  
         	echo json_encode($response);
 		}
-
-
 ?>

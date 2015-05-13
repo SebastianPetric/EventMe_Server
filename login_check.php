@@ -17,7 +17,7 @@ if(isset($_POST['email']) && isset($_POST['password'])){
                 while ($row = $login->fetch()) {
                     $password_check = $row["password"];
                     $user_id=$row["user_id"]; 
-            if(strcmp($password,$password_check)==0){
+            if(strcmp(md5($password),$password_check)==0){
                 $db -> commit (); 
                 $response["status"] = 200;
                 $response["user_id"]=$user_id;
