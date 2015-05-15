@@ -18,6 +18,8 @@ if(isset($_POST['id'])){
                     
                     if(($get_history->rowCount())>0){
                         foreach ($get_history as $rowHistory) {
+                            $history['id']=$rowHistory['task_history_id'];
+                            $history['editor_id']=$rowHistory['user_id'];
                             $editor_temp=$rowHistory["user_id"];
                             $history['comment']=$rowHistory["comment"];
                             $timestamp = $rowHistory["created_at"];
